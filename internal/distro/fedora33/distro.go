@@ -57,6 +57,8 @@ type imageType struct {
 	filename         string
 	mimeType         string
 	packages         []string
+	packagesX86_64   []string
+	packagesAarch64  []string
 	excludedPackages []string
 	enabledServices  []string
 	disabledServices []string
@@ -151,6 +153,8 @@ func (a *architecture) setImageTypes(imageTypes ...imageType) {
 			filename:         it.filename,
 			mimeType:         it.mimeType,
 			packages:         it.packages,
+			packagesX86_64:   it.packagesX86_64,
+			packagesAarch64:  it.packagesAarch64,
 			excludedPackages: it.excludedPackages,
 			enabledServices:  it.enabledServices,
 			disabledServices: it.disabledServices,
@@ -202,6 +206,13 @@ func (t *imageType) Packages(bp blueprint.Blueprint) ([]string, []string) {
 	}
 	if t.bootable {
 		packages = append(packages, t.arch.bootloaderPackages...)
+	}
+
+	switch t.arch.Name() {
+	case distro.X86_64ArchName:
+		packages = append(packages, t.packagesX86_64...)
+	case distro.Aarch64ArchName:
+		packages = append(packages, t.packagesAarch64...)
 	}
 
 	// copy the list of excluded packages from the image type
@@ -696,11 +707,17 @@ func newDistro(name, modulePlatformID, ostreeRef string) distro.Distro {
 			"slirp4netns", "fuse-overlayfs",
 			"clevis", "clevis-dracut", "clevis-luks", "clevis-pin-tpm2",
 			"parsec", "dbus-parsec",
-			// x86 specific
+		},
+		packagesX86_64: []string{
 			"grub2", "grub2-efi-x64", "efibootmgr", "shim-x64", "microcode_ctl",
 			"iwl1000-firmware", "iwl100-firmware", "iwl105-firmware", "iwl135-firmware",
 			"iwl2000-firmware", "iwl2030-firmware", "iwl3160-firmware", "iwl5000-firmware",
 			"iwl5150-firmware", "iwl6000-firmware", "iwl6050-firmware", "iwl7260-firmware",
+		},
+		packagesAarch64: []string{
+			"grub2-efi-aa64", "efibootmgr", "shim-aa64",
+			"uboot-tools", "uboot-images-armv8", "bcm283x-firmware",
+			"arm-image-installer", "iwl7260-firmware", "iwlax2xx-firmware",
 		},
 		enabledServices: []string{
 			"NetworkManager.service", "firewalld.service", "rngd.service", "sshd.service",
@@ -906,7 +923,7 @@ func newDistro(name, modulePlatformID, ostreeRef string) distro.Distro {
 	}
 	x8664 := architecture{
 		distro: &r,
-		name:   "x86_64",
+		name:   distro.X86_64ArchName,
 		bootloaderPackages: []string{
 			"dracut-config-generic",
 			"grub2-pc",
@@ -927,7 +944,7 @@ func newDistro(name, modulePlatformID, ostreeRef string) distro.Distro {
 
 	aarch64 := architecture{
 		distro: &r,
-		name:   "aarch64",
+		name:   distro.Aarch64ArchName,
 		bootloaderPackages: []string{
 			"dracut-config-generic",
 			"efibootmgr",
@@ -938,6 +955,7 @@ func newDistro(name, modulePlatformID, ostreeRef string) distro.Distro {
 		uefi: true,
 	}
 	aarch64.setImageTypes(
+		iotImgType,
 		amiImgType,
 		qcow2ImageType,
 		openstackImgType,

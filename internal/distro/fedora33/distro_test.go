@@ -330,6 +330,43 @@ func TestDistro_ManifestError(t *testing.T) {
 	}
 }
 
+func TestArchitecture_ListImageTypes(t *testing.T) {
+	f33distro := fedora33.New()
+
+	imgMap := []struct {
+		arch     string
+		imgNames []string
+	}{
+		{
+			arch: "x86_64",
+			imgNames: []string{
+				"fedora-iot-commit",
+				"ami",
+				"qcow2",
+				"openstack",
+				"vhd",
+				"vmdk",
+			},
+		},
+		{
+			arch: "aarch64",
+			imgNames: []string{
+				"fedora-iot-commit",
+				"ami",
+				"qcow2",
+				"openstack",
+			},
+		},
+	}
+
+	for _, mapping := range imgMap {
+		arch, err := f33distro.GetArch(mapping.arch)
+		assert.NoError(t, err)
+		imageTypes := arch.ListImageTypes()
+		assert.ElementsMatch(t, mapping.imgNames, imageTypes)
+	}
+}
+
 func TestFedora33_ListArches(t *testing.T) {
 	distro := fedora33.New()
 	arches := distro.ListArches()
