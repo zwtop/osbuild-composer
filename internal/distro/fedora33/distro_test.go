@@ -124,51 +124,13 @@ func TestImageType_BuildPackages(t *testing.T) {
 			}
 			buildPkgs := itStruct.PackageSets(blueprint.Blueprint{})["build-packages"]
 			assert.NotNil(t, buildPkgs)
-			if itLabel == "fedora-iot-commit" {
+			if itLabel == "fedora-iot-commit" || itLabel == "fedora-ostree-base" {
 				// For now we only include rpm-ostree when building fedora-iot-commit image types, this we may want
 				// to reconsider. The only reason to specia-case it is that it might pull in a lot of dependencies
 				// for a niche usecase.
 				assert.ElementsMatch(t, append(buildPackages[archLabel], "rpm-ostree"), buildPkgs.Include)
 			} else {
 				assert.ElementsMatch(t, buildPackages[archLabel], buildPkgs.Include)
-			}
-		}
-	}
-}
-
-func TestImageType_Name(t *testing.T) {
-	distro := fedora33.New()
-	imgMap := []struct {
-		arch     string
-		imgNames []string
-	}{
-		{
-			arch: "x86_64",
-			imgNames: []string{
-				"ami",
-				"qcow2",
-				"openstack",
-				"vhd",
-				"vmdk",
-			},
-		},
-		{
-			arch: "aarch64",
-			imgNames: []string{
-				"ami",
-				"qcow2",
-				"openstack",
-			},
-		},
-	}
-	for _, mapping := range imgMap {
-		arch, err := distro.GetArch(mapping.arch)
-		if assert.NoError(t, err) {
-			for _, imgName := range mapping.imgNames {
-				imgType, err := arch.GetImageType(imgName)
-				if assert.NoError(t, err) {
-					assert.Equalf(t, imgName, imgType.Name(), "arch: %s", mapping.arch)
-				}
 			}
 		}
 	}
@@ -321,7 +283,7 @@ func TestDistro_ManifestError(t *testing.T) {
 		for _, imgTypeName := range arch.ListImageTypes() {
 			imgType, _ := arch.GetImageType(imgTypeName)
 			_, err := imgType.Manifest(bp.Customizations, distro.ImageOptions{}, nil, nil, 0)
-			if imgTypeName == "fedora-iot-commit" {
+			if imgTypeName == "fedora-iot-commit" || imgTypeName == "fedora-ostree-base" {
 				assert.EqualError(t, err, "kernel boot parameter customizations are not supported for ostree types")
 			} else {
 				assert.NoError(t, err)
@@ -341,6 +303,7 @@ func TestArchitecture_ListImageTypes(t *testing.T) {
 			arch: "x86_64",
 			imgNames: []string{
 				"fedora-iot-commit",
+				"fedora-ostree-base",
 				"ami",
 				"qcow2",
 				"openstack",
@@ -352,6 +315,7 @@ func TestArchitecture_ListImageTypes(t *testing.T) {
 			arch: "aarch64",
 			imgNames: []string{
 				"fedora-iot-commit",
+				"fedora-ostree-base",
 				"ami",
 				"qcow2",
 				"openstack",
@@ -434,7 +398,7 @@ func TestDistro_CustomFileSystemManifestError(t *testing.T) {
 		for _, imgTypeName := range arch.ListImageTypes() {
 			imgType, _ := arch.GetImageType(imgTypeName)
 			_, err := imgType.Manifest(bp.Customizations, distro.ImageOptions{}, nil, nil, 0)
-			if imgTypeName == "fedora-iot-commit" {
+			if imgTypeName == "fedora-iot-commit" || imgTypeName == "fedora-ostree-base" {
 				assert.EqualError(t, err, "Custom mountpoints are not supported for ostree types")
 			} else {
 				assert.EqualError(t, err, "The following custom mountpoints are not supported [\"/boot\"]")
@@ -460,7 +424,7 @@ func TestDistro_TestRootMountPoint(t *testing.T) {
 		for _, imgTypeName := range arch.ListImageTypes() {
 			imgType, _ := arch.GetImageType(imgTypeName)
 			_, err := imgType.Manifest(bp.Customizations, distro.ImageOptions{}, nil, nil, 0)
-			if imgTypeName == "fedora-iot-commit" {
+			if imgTypeName == "fedora-iot-commit" || imgTypeName == "fedora-ostree-base" {
 				assert.EqualError(t, err, "Custom mountpoints are not supported for ostree types")
 			} else {
 				assert.NoError(t, err)

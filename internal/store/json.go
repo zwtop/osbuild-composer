@@ -350,6 +350,7 @@ var imageTypeCompatMapping = map[string]string{
 	"partitioned-disk":               "Partitioned-disk",
 	"tar":                            "Tar",
 	"fedora-iot-commit":              "fedora-iot-commit",
+	"fedora-ostree-base":             "fedora-ostree-base",
 	"rhel-edge-commit":               "rhel-edge-commit",
 	"rhel-edge-container":            "rhel-edge-container",
 	"rhel-edge-installer":            "rhel-edge-installer",

@@ -664,6 +664,46 @@ func NewHostDistro(name, modulePlatformID, ostreeRef string) distro.Distro {
 func newDistro(name, modulePlatformID, ostreeRef string) distro.Distro {
 	const GigaByte = 1024 * 1024 * 1024
 
+	ostreeImgType := imageType{
+		name:     "fedora-ostree-base",
+		filename: "commit.tar",
+		mimeType: "application/x-tar",
+		packages: []string{
+			"fedora-release", "basesystem", "network-scripts",
+			"glibc", "python3", "tmux", "nss-altfiles",
+			"dracut-config-generic", "dracut-network",
+			"polkit", "lvm2", "cryptsetup",
+			"bash", "bash-completion", "crontabs", "logrotate",
+			"coreutils", "which", "curl", "wget", "openssl", "jq",
+			"hostname", "iproute", "iputils", "iptables",
+			"openssh-clients", "openssh-server", "passwd",
+			"dnsmasq", "traceroute", "tcpdump", "net-tools",
+			"tar", "gzip", "xz", "man",
+			"e2fsprogs", "xfsprogs", "dosfstools",
+			"sudo", "systemd", "util-linux", "vim-enhanced",
+			"setools-console", "kernel-tools",
+			"setup", "shadow-utils", "attr", "audit",
+			"policycoreutils", "selinux-policy-targeted",
+			"procps-ng", "rpm", "rpm-ostree",
+			"keyutils", "cracklib-dicts",
+			"container-selinux", "gnupg2", "pinentry",
+		},
+		packagesX86_64: []string{
+			"grub2", "grub2-efi-x64", "efibootmgr", "shim-x64", "microcode_ctl",
+		},
+		packagesAarch64: []string{
+			"grub2-efi-aa64", "efibootmgr", "shim-aa64",
+			"uboot-tools", "uboot-images-armv8", "arm-image-installer",
+		},
+		enabledServices: []string{
+			"sshd.service", // "network.service", // network.service should be enabled in kickstart
+		},
+		rpmOstree: true,
+		assembler: func(uefi bool, options distro.ImageOptions, arch distro.Arch) *osbuild.Assembler {
+			return ostreeCommitAssembler(options, arch)
+		},
+	}
+
 	iotImgType := imageType{
 		name:     "fedora-iot-commit",
 		filename: "commit.tar",
@@ -935,6 +975,7 @@ func newDistro(name, modulePlatformID, ostreeRef string) distro.Distro {
 	}
 	x8664.setImageTypes(
 		iotImgType,
+		ostreeImgType,
 		amiImgType,
 		qcow2ImageType,
 		openstackImgType,
@@ -956,6 +997,7 @@ func newDistro(name, modulePlatformID, ostreeRef string) distro.Distro {
 	}
 	aarch64.setImageTypes(
 		iotImgType,
+		ostreeImgType,
 		amiImgType,
 		qcow2ImageType,
 		openstackImgType,
