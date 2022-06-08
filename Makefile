@@ -127,8 +127,8 @@ build:
 .PHONY: install
 install:
 	- mkdir -p /usr/libexec/osbuild-composer
-	cp bin/osbuild-composer /usr/libexec/osbuild-composer/
-	cp bin/osbuild-worker /usr/libexec/osbuild-composer/
+	install bin/osbuild-composer /usr/libexec/osbuild-composer/
+	install bin/osbuild-worker /usr/libexec/osbuild-composer/
 	cp dnf-json /usr/libexec/osbuild-composer/
 	- mkdir -p /usr/share/osbuild-composer/repositories
 	cp repositories/* /usr/share/osbuild-composer/repositories
