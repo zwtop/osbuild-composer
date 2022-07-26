@@ -670,6 +670,7 @@ func newDistro(name, modulePlatformID, ostreeRef string) distro.Distro {
 		mimeType: "application/x-tar",
 		packages: []string{
 			"fedora-release", "basesystem", "network-scripts",
+			"kernel-5.14.0-130",
 			"glibc", "python3", "tmux", "nss-altfiles",
 			"lvm2", "cryptsetup", "dracut", "dracut-config-generic",
 			"bash", "bash-completion", "crontabs", "logrotate",
