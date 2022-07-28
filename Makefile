@@ -111,18 +111,18 @@ build:
 	- mkdir bin
 	go build -o bin/osbuild-composer ./cmd/osbuild-composer/
 	go build -o bin/osbuild-worker ./cmd/osbuild-worker/
-	go build -o bin/osbuild-pipeline ./cmd/osbuild-pipeline/
-	go build -o bin/osbuild-upload-azure ./cmd/osbuild-upload-azure/
-	go build -o bin/osbuild-upload-aws ./cmd/osbuild-upload-aws/
-	go build -o bin/osbuild-upload-gcp ./cmd/osbuild-upload-gcp/
-	go build -o bin/osbuild-mock-openid-provider ./cmd/osbuild-mock-openid-provider
-	go test -c -tags=integration -o bin/osbuild-composer-cli-tests ./cmd/osbuild-composer-cli-tests/main_test.go
-	go test -c -tags=integration -o bin/osbuild-weldr-tests ./internal/client/
-	go test -c -tags=integration -o bin/osbuild-dnf-json-tests ./cmd/osbuild-dnf-json-tests/main_test.go
-	go test -c -tags=integration -o bin/osbuild-image-tests ./cmd/osbuild-image-tests/
-	go test -c -tags=integration -o bin/osbuild-auth-tests ./cmd/osbuild-auth-tests/
-	go test -c -tags=integration -o bin/osbuild-koji-tests ./cmd/osbuild-koji-tests/
-	go test -c -tags=integration -o bin/osbuild-composer-dbjobqueue-tests ./cmd/osbuild-composer-dbjobqueue-tests/
+#	go build -o bin/osbuild-pipeline ./cmd/osbuild-pipeline/
+#	go build -o bin/osbuild-upload-azure ./cmd/osbuild-upload-azure/
+#	go build -o bin/osbuild-upload-aws ./cmd/osbuild-upload-aws/
+#	go build -o bin/osbuild-upload-gcp ./cmd/osbuild-upload-gcp/
+#	go build -o bin/osbuild-mock-openid-provider ./cmd/osbuild-mock-openid-provider
+#	go test -c -tags=integration -o bin/osbuild-composer-cli-tests ./cmd/osbuild-composer-cli-tests/main_test.go
+#	go test -c -tags=integration -o bin/osbuild-weldr-tests ./internal/client/
+#	go test -c -tags=integration -o bin/osbuild-dnf-json-tests ./cmd/osbuild-dnf-json-tests/main_test.go
+#	go test -c -tags=integration -o bin/osbuild-image-tests ./cmd/osbuild-image-tests/
+#	go test -c -tags=integration -o bin/osbuild-auth-tests ./cmd/osbuild-auth-tests/
+#	go test -c -tags=integration -o bin/osbuild-koji-tests ./cmd/osbuild-koji-tests/
+#	go test -c -tags=integration -o bin/osbuild-composer-dbjobqueue-tests ./cmd/osbuild-composer-dbjobqueue-tests/
 
 .PHONY: install
 install:

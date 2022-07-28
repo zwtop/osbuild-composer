@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"os"
 	"strings"
 
 	"github.com/osbuild/osbuild-composer/internal/blueprint"
@@ -177,28 +176,7 @@ func (m Manifest) Version() (string, error) {
 }
 
 func GetHostDistroName() (string, bool, bool, error) {
-	f, err := os.Open("/etc/os-release")
-	if err != nil {
-		return "", false, false, err
-	}
-	defer f.Close()
-	osrelease, err := readOSRelease(f)
-	if err != nil {
-		return "", false, false, err
-	}
-
-	isStream := osrelease["NAME"] == "CentOS Stream"
-
-	// NOTE: We only consider major releases up until rhel 8.4
-	version := strings.Split(osrelease["VERSION_ID"], ".")
-	name := osrelease["ID"] + "-" + version[0]
-	if osrelease["ID"] == "rhel" && ((version[0] == "8" && version[1] >= "4") || version[0] == "9") {
-		name = name + version[1]
-	}
-
-	// TODO: We should probably index these things by the full CPE
-	beta := strings.Contains(osrelease["CPE_NAME"], "beta")
-	return name, beta, isStream, nil
+	return "centos-8", false, false, nil
 }
 
 // GetRedHatRelease returns the content of /etc/redhat-release
