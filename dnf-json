@@ -91,6 +91,8 @@ def create_base(repos, module_platform_id, persistdir, cachedir, arch):
         base.repos.add(dnfrepo(repo, base.conf))
 
     base.fill_sack(load_system_repo=False)
+    module_base = dnf.module.module_base.ModuleBase(base)
+    module_base.enable(['container-tools'])
     return base
 
 

@@ -348,6 +348,7 @@ var imageTypeCompatMapping = map[string]string{
 	"vmdk":                           "VMWare",
 	"ext4-filesystem":                "Raw-filesystem",
 	"partitioned-disk":               "Partitioned-disk",
+	"rocky-ostree-base":             "rocky-ostree-base",
 	"tar":                            "Tar",
 	"fedora-iot-commit":              "fedora-iot-commit",
 	"fedora-ostree-base":             "fedora-ostree-base",
