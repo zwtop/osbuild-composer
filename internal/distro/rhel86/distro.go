@@ -594,6 +594,52 @@ func newDistro(distroName string) distro.Distro {
 		basePartitionTables: edgeBasePartitionTables,
 	}
 
+	ostreeAARCHImgType := imageType{
+		name:     "rocky-ostree-base",
+		filename: "commit.tar",
+		mimeType: "application/x-tar",
+
+		packageSets: map[string]packageSetFunc{
+			buildPkgsKey: edgeBuildPackageSet,
+			osPkgsKey: func(t *imageType) rpmmd.PackageSet {
+				return rpmmd.PackageSet{
+					Include: []string{
+						"rocky-release", "basesystem", "network-scripts", "kernel",
+						"glibc", "tmux", "nss-altfiles", "glibc-minimal-langpack",
+						"lvm2", "cryptsetup", "dracut", "dracut-config-generic",
+						"bash", "bash-completion", "crontabs", "logrotate",
+						"coreutils", "which", "curl", "wget", "openssl", "jq",
+						"hostname", "iproute", "iputils", "iptables",
+						"openssh-clients", "openssh-server", "passwd",
+						"dnsmasq", "traceroute", "tcpdump", "net-tools",
+						"tar", "gzip", "xz", "man", "polkit",
+						"e2fsprogs", "xfsprogs", "dosfstools",
+						"sudo", "systemd", "util-linux", "vim-minimal",
+						"setools-console", "kernel-tools",
+						"setup", "shadow-utils", "attr", "audit",
+						"policycoreutils", "selinux-policy-targeted",
+						"procps-ng", "rpm", "rpm-ostree",
+						"keyutils", "cracklib-dicts",
+						"gnupg2", "pinentry", "cloud-init", "containerd.io-1.5.*",
+						"grub2", "grub2-efi-aa64", "efibootmgr", "shim-aa64",
+					},
+					Exclude: []string{
+						"geolite2-city",
+						"geolite2-country",
+						"glibc-all-langpacks",
+						// "linux-firmware",
+						"mozjs78",
+					},
+				}
+			},
+		},
+		pipelines: edgeCommitPipelines,
+		exports:   []string{"commit-archive"},
+		enabledServices: []string{
+			"sshd.service", // "network.service", // network.service should be enabled in kickstart
+		},
+	}
+
 	ostreeImgType := imageType{
 		name:     "rocky-ostree-base",
 		filename: "commit.tar",
@@ -918,7 +964,7 @@ func newDistro(distroName string) distro.Distro {
 	}
 
 	x86_64.addImageTypes(ostreeImgType, qcow2ImgType, vhdImgType, vmdkImgType, openstackImgType, amiImgTypeX86_64, tarImgType, tarInstallerImgTypeX86_64, edgeCommitImgType, edgeInstallerImgType, edgeOCIImgType, edgeRawImgType, edgeSimplifiedInstallerImgType)
-	aarch64.addImageTypes(qcow2ImgType, openstackImgType, amiImgTypeAarch64, tarImgType, edgeCommitImgType, edgeInstallerImgType, edgeOCIImgType, edgeRawImgType, edgeSimplifiedInstallerImgType)
+	aarch64.addImageTypes(ostreeAARCHImgType, qcow2ImgType, openstackImgType, amiImgTypeAarch64, tarImgType, edgeCommitImgType, edgeInstallerImgType, edgeOCIImgType, edgeRawImgType, edgeSimplifiedInstallerImgType)
 	ppc64le.addImageTypes(qcow2ImgType, tarImgType)
 	s390x.addImageTypes(qcow2ImgType, tarImgType)
 

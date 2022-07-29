@@ -134,12 +134,6 @@ arch = arguments["arch"]
 cachedir = arguments["cachedir"]
 module_platform_id = arguments["module_platform_id"]
 
-file_object = open('/var/log/dnf-json-mock.log', 'a')
-file_object.write("\n===============================\n")
-file_object.write(command+"\n")
-file_object.write(json.dumps(arguments)+"\n")
-file_object.close()
-
 with tempfile.TemporaryDirectory() as persistdir:
     try:
         base = create_base(
@@ -226,10 +220,3 @@ with tempfile.TemporaryDirectory() as persistdir:
             "checksums": repo_checksums(base),
             "dependencies": dependencies
         }, sys.stdout)
-
-        file_object = open('/var/log/dnf-json-mock.log', 'a')
-        json.dump({
-            "checksums": repo_checksums(base),
-            "dependencies": dependencies
-        }, file_object)
-        file_object.close()
