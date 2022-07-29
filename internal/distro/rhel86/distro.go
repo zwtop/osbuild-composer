@@ -605,7 +605,7 @@ func newDistro(distroName string) distro.Distro {
 				return rpmmd.PackageSet{
 					Include: []string{
 						"rocky-release", "basesystem", "network-scripts",
-						"glibc", "tmux", "nss-altfiles",
+						"glibc", "tmux", "nss-altfiles", "glibc-minimal-langpack",
 						"lvm2", "cryptsetup", "dracut", "dracut-config-generic",
 						"bash", "bash-completion", "crontabs", "logrotate",
 						"coreutils", "which", "curl", "wget", "openssl", "jq",
