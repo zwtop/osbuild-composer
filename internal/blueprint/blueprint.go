@@ -105,9 +105,9 @@ func (b *Blueprint) GetPackages() []string {
 		packages = append(packages, "@"+group.Name)
 	}
 
-	kc := b.Customizations.GetKernel()
-	kpkg := Package{Name: kc.Name}
-	packages = append(packages, kpkg.ToNameVersion())
+//	kc := b.Customizations.GetKernel()
+//	kpkg := Package{Name: kc.Name}
+//	packages = append(packages, kpkg.ToNameVersion())
 
 	return packages
 }

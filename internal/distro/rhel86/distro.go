@@ -604,7 +604,7 @@ func newDistro(distroName string) distro.Distro {
 			osPkgsKey: func(t *imageType) rpmmd.PackageSet {
 				return rpmmd.PackageSet{
 					Include: []string{
-						"rocky-release", "basesystem", "network-scripts",
+						"rocky-release", "basesystem", "network-scripts", "kernel",
 						"glibc", "tmux", "nss-altfiles", "glibc-minimal-langpack",
 						"lvm2", "cryptsetup", "dracut", "dracut-config-generic",
 						"bash", "bash-completion", "crontabs", "logrotate",
@@ -620,12 +620,13 @@ func newDistro(distroName string) distro.Distro {
 						"policycoreutils", "selinux-policy-targeted",
 						"procps-ng", "rpm", "rpm-ostree",
 						"keyutils", "cracklib-dicts",
-						"gnupg2", "pinentry",
+						"gnupg2", "pinentry", "cloud-init", "containerd.io-1.5.*",
 						"grub2", "grub2-efi-x64", "efibootmgr", "shim-x64",
 					},
 					Exclude: []string{
 						"geolite2-city",
 						"geolite2-country",
+						"glibc-all-langpacks",
 						// "linux-firmware",
 						"mozjs78",
 					},
