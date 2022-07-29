@@ -612,7 +612,7 @@ func newDistro(distroName string) distro.Distro {
 						"hostname", "iproute", "iputils", "iptables",
 						"openssh-clients", "openssh-server", "passwd",
 						"dnsmasq", "traceroute", "tcpdump", "net-tools",
-						"tar", "gzip", "xz", "man",
+						"tar", "gzip", "xz", "man", "polkit",
 						"e2fsprogs", "xfsprogs", "dosfstools",
 						"sudo", "systemd", "util-linux", "vim-minimal",
 						"setools-console", "kernel-tools",
